@@ -1,65 +1,254 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Navbar from "@/components/Navbar";
+
+// YOUR PHOTO DATABASE
+const allPhotos = [
+  {
+    id: 1,
+    category: "Portraits",
+    src: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04",
+    title: "Editorial Portrait",
+  },
+  {
+    id: 2,
+    category: "Portraits",
+    src: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
+    title: "Male Portrait",
+  },
+  {
+    id: 3,
+    category: "Weddings",
+    src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622",
+    title: "The Ceremony",
+  },
+  {
+    id: 4,
+    category: "Weddings",
+    src: "https://images.unsplash.com/photo-1519741497674-611481863552",
+    title: "Beach Wedding",
+  },
+  {
+    id: 5,
+    category: "Nature",
+    src: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
+    title: "Deep Forest",
+  },
+  {
+    id: 6,
+    category: "Nature",
+    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
+    title: "Mountain Peak",
+  },
+];
 
 export default function Home() {
+  const [filter, setFilter] = useState("All");
+  const [selectedImg, setSelectedImg] = useState(null);
+
+  const filteredPhotos =
+    filter === "All"
+      ? allPhotos
+      : allPhotos.filter((img) => img.category === filter);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="bg-black text-white min-h-screen font-sans overflow-x-hidden">
+      <Navbar />
+
+      {/* 1. HERO SECTION */}
+      <section className="h-screen relative flex items-center justify-center overflow-hidden">
+        <motion.div
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 0.5 }}
+          transition={{ duration: 2 }}
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e')] bg-cover bg-center"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className="relative z-10 text-center px-4">
+          <motion.h1
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="text-5xl md:text-8xl font-serif tracking-tight mb-4"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            Moments in Motion
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="uppercase tracking-[0.5em] text-sm md:text-lg text-gray-300"
+          >
+            Premium Studio Photography
+          </motion.p>
+        </div>
+      </section>
+
+      {/* 2. PORTFOLIO SECTION */}
+      <section id="portfolio" className="py-24 px-6 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-serif mb-8">Portfolio</h2>
+          <div className="flex flex-wrap justify-center gap-4">
+            {["All", "Portraits", "Weddings", "Nature"].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-8 py-2 rounded-full border border-white/20 transition-all text-xs tracking-widest uppercase ${
+                  filter === cat ? "bg-white text-black" : "hover:bg-white/10"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <motion.div
+          layout
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredPhotos.map((photo) => (
+              <motion.div
+                key={photo.id}
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                onClick={() => setSelectedImg(photo.src)}
+                className="relative aspect-[3/4] cursor-pointer group overflow-hidden bg-zinc-900 shadow-2xl"
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.title}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="border border-white px-6 py-2 uppercase text-xs tracking-widest">
+                    View Photo
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      </section>
+
+      {/* 3. ABOUT SECTION */}
+      <section id="about" className="py-24 bg-zinc-950 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="md:w-1/2 aspect-square relative"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1554048612-b6a482bc67e5"
+              className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-700 rounded-sm"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="md:w-1/2"
           >
-            Documentation
-          </a>
+            <h2 className="text-4xl font-serif mb-6">
+              The Art of Storytelling
+            </h2>
+            <p className="text-gray-400 leading-relaxed text-lg mb-6">
+              Founded on the principle of capturing raw, unscripted emotion, our
+              studio has been the choice for editorial icons and private
+              ceremonies for over a decade.
+            </p>
+            <p className="text-gray-400 leading-relaxed">
+              We don't just take pictures; we frame memories that speak when
+              words fail. High-end, timeless, and uniquely yours.
+            </p>
+          </motion.div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* 4. CONTACT SECTION (Lead Gen) */}
+      <section id="contact" className="py-24 px-6 bg-black">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-4xl font-serif mb-4">Let's Collaborate</h2>
+          <p className="text-gray-500 mb-12">
+            Send us a message and we'll get back to you within 24 hours.
+          </p>
+
+          <form
+            action="https://api.web3forms.com/submit"
+            method="POST"
+            className="space-y-8 text-left"
+          >
+            <input
+              type="hidden"
+              name="access_key"
+              value="YOUR_ACCESS_KEY_HERE"
+            />
+            <input
+              type="hidden"
+              name="to_email"
+              value="dev.nishantg@gmail.com"
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                required
+                className="bg-transparent border-b border-zinc-700 py-3 focus:border-white outline-none transition w-full"
+              />
+              <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                required
+                className="bg-transparent border-b border-zinc-700 py-3 focus:border-white outline-none transition w-full"
+              />
+            </div>
+            <textarea
+              name="message"
+              placeholder="Tell us about your project"
+              rows="4"
+              required
+              className="w-full bg-transparent border-b border-zinc-700 py-3 focus:border-white outline-none transition"
+            ></textarea>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full bg-white text-black py-4 uppercase tracking-[0.3em] font-bold text-sm hover:bg-gray-200 transition"
+            >
+              Send Inquiry
+            </motion.button>
+          </form>
+        </div>
+      </section>
+
+      {/* LIGHTBOX POPUP */}
+      <AnimatePresence>
+        {selectedImg && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImg(null)}
+            className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 cursor-zoom-out"
+          >
+            <motion.img
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              src={selectedImg}
+              className="max-w-full max-h-full object-contain"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <footer className="py-10 text-center text-zinc-600 text-xs tracking-widest border-t border-zinc-900">
+        © 2026 YOUR STUDIO. ALL RIGHTS RESERVED.
+      </footer>
+    </main>
   );
 }
