@@ -46,6 +46,31 @@ const allPhotos = [
 export default function Home() {
   const [filter, setFilter] = useState("All");
   const [selectedImg, setSelectedImg] = useState(null);
+  // 1. Add this state inside your Home function at the top
+  const [result, setResult] = useState("");
+
+  // 2. Add this handler inside your Home function
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setResult("Sending..."); // Feedback for the user
+    const formData = new FormData(event.target);
+
+    // This uses the key you just got!
+    formData.append("access_key", "64e25547-a3d9-434a-9940-f22248ad03bc");
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      setResult("Message Sent Successfully!");
+      event.target.reset(); // Clears the form
+    } else {
+      setResult("Something went wrong. Please try again.");
+    }
+  };
 
   const filteredPhotos =
     filter === "All"
@@ -175,22 +200,7 @@ export default function Home() {
             Send us a message and we'll get back to you within 24 hours.
           </p>
 
-          <form
-            action="https://api.web3forms.com/submit"
-            method="POST"
-            className="space-y-8 text-left"
-          >
-            <input
-              type="hidden"
-              name="access_key"
-              value={process.env.NEXT_PUBLIC_W3_KEY}
-            />
-            <input
-              type="hidden"
-              name="to_email"
-              value="dev.nishantg@gmail.com"
-            />
-
+          <form onSubmit={onSubmit} className="space-y-8 text-left">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <input
                 type="text"
@@ -218,10 +228,28 @@ export default function Home() {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              type="submit"
               className="w-full bg-white text-black py-4 uppercase tracking-[0.3em] font-bold text-sm hover:bg-gray-200 transition"
             >
               Send Inquiry
             </motion.button>
+
+            {/* SUCCESS/ERROR MESSAGE UI */}
+            <AnimatePresence>
+              {result && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`mt-4 text-center text-sm tracking-widest ${
+                    result.includes("Success")
+                      ? "text-green-400"
+                      : "text-gray-400"
+                  }`}
+                >
+                  {result}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </form>
         </div>
       </section>
