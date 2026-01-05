@@ -183,7 +183,7 @@ export default function Home() {
             <input
               type="hidden"
               name="access_key"
-              value="YOUR_ACCESS_KEY_HERE"
+              value={process.env.NEXT_PUBLIC_W3_KEY}
             />
             <input
               type="hidden"
