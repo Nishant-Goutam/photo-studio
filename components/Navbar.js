@@ -16,18 +16,19 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed w-full z-50 px-6 md:px-10 py-4 bg-black/20 backdrop-blur-md text-white">
+    <nav className="fixed w-full z-50 h-16 px-6 md:px-10 md:py-2 bg-black/20 backdrop-blur-md text-white">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         {/* LOGO */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/Logo.jpg"
-            alt="Logo"
-            width={120}
-            height={40}
-            className="object-contain"
-            priority
-          />
+        <Link href="/" className="flex items-center h-full">
+          <div className="relative h-10 w-32">
+            <Image
+              src="/ManiLogo.jpg"
+              alt="Logo"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
         </Link>
 
         {/* DESKTOP NAV (Hidden on Mobile) */}
