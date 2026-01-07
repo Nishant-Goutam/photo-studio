@@ -87,7 +87,7 @@ export default function Home() {
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 0.5 }}
           transition={{ duration: 2 }}
-          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e')] bg-cover bg-center"
+          className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e')] bg-cover bg-[position:50%_28%]"
         />
         <div className="relative z-10 text-center px-4">
           <motion.h1

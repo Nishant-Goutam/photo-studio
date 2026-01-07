@@ -16,7 +16,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed w-full z-50 h-16 px-6 md:px-10 md:py-2 bg-black/20 backdrop-blur-md text-white">
+    <nav className="fixed w-full z-50 h-16 px-6 md:px-10 md:py-3 bg-black/20 backdrop-blur-md text-white">
       <div className="flex justify-between items-center max-w-7xl mx-auto">
         {/* LOGO */}
         <Link href="/" className="flex items-center h-full">
